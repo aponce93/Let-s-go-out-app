@@ -1,0 +1,232 @@
+import SwiftUI
+import MapKit
+
+// Main View with Tab Bar
+struct MainView: View {
+    var body: some View {
+        TabView {
+            // Home Tab (Event Types List is shown here)
+            ContentView()
+                .tabItem {
+                    Image(systemName: "house.fill")
+                    Text("Home")
+                }
+            
+            // Search Tab with Search Bar and Example Events
+            SearchView()
+                .tabItem {
+                    Image(systemName: "magnifyingglass")
+                    Text("Search")
+                }
+            
+            // All Events Tab (Shows All Events with Example Locations)
+            AllEventsView()
+                .tabItem {
+                    Image(systemName: "sparkles")
+                    Text("All Events")
+                }
+            
+            // Account Tab with buttons and dark gray background
+            AccountView()
+                .tabItem {
+                    Image(systemName: "person.crop.circle")
+                    Text("Account")
+                }
+        }
+    }
+}
+
+// ContentView for Event Types List (Now under Home Tab)
+struct ContentView: View {
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 20) {
+                ForEach(0..<eventTypes.count, id: \.self) { index in
+                    NavigationLink(destination: EventResultsView(eventType: eventTypes[index])) {
+                        Text(eventTypes[index])
+                            .foregroundColor(.white)
+                            .frame(width: 300, height: 50) // Box size
+                            .background(index % 2 == 0 ? Color.orange : Color.black) // Alternating colors
+                            .cornerRadius(10) // Rounded corners
+                            .font(.headline) // Text style
+                    }
+                }
+            }
+            .padding() // Adds padding around the content
+            .background(Color.gray.edgesIgnoringSafeArea(.all)) // Gray background
+            .navigationTitle("Let's Go Out!")
+        }
+    }
+
+    // List of event types
+    let eventTypes = ["Concerts", "Food Festivals", "Outdoor Activities", "Sporting Events", "Theme Parks", "Night Life", "Hobbies"]
+}
+
+// Event Results View
+struct EventResultsView: View {
+    let eventType: String
+    
+    var body: some View {
+        VStack {
+            Text("Showing results for \(eventType)")
+                .font(.largeTitle)
+                .padding()
+            
+            // Placeholder content - you can add actual map pins, data, etc.
+            Text("Here are some example locations for \(eventType).")
+                .padding()
+            
+            // Example locations - in the real app, this could be a list or a map
+            List {
+                Text("Phoenix, AZ")
+                Text("Glendale, AZ")
+                Text("Tempe, AZ")
+            }
+        }
+        .navigationTitle(eventType)
+        .background(Color.white.edgesIgnoringSafeArea(.all))
+    }
+}
+
+// All Events View with Example Locations
+struct AllEventsView: View {
+    var body: some View {
+        NavigationView {
+            VStack {
+                Text("All Events")
+                    .font(.largeTitle)
+                    .padding()
+                
+                // List of all events and example locations
+                List {
+                    EventItemView(eventType: "Concerts", location: "Central Park, NYC")
+                    EventItemView(eventType: "Food Festivals", location: "Golden Gate Park, SF")
+                    EventItemView(eventType: "Outdoor Activities", location: "Yosemite National Park")
+                    EventItemView(eventType: "Sporting Events", location: "Wembley Stadium, London")
+                    EventItemView(eventType: "Theme Parks", location: "Disneyland, Anaheim")
+                    EventItemView(eventType: "Night Life", location: "Las Vegas Strip, NV")
+                    EventItemView(eventType: "Hobbies", location: "Brooklyn Art Studio, NYC")
+                }
+                .listStyle(InsetGroupedListStyle()) // Style for better visual appearance
+            }
+            .background(Color(UIColor.systemGray5).edgesIgnoringSafeArea(.all)) // Light gray background
+        }
+    }
+}
+
+// Single Event Item with Event Type and Location
+struct EventItemView: View {
+    let eventType: String
+    let location: String
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text(eventType)
+                .font(.headline)
+                .padding(.bottom, 2)
+            Text(location)
+                .font(.subheadline)
+                .foregroundColor(.gray)
+        }
+        .padding()
+    }
+}
+
+// Search View with Search Bar and Example Events
+struct SearchView: View {
+    @State private var searchText = ""
+
+    var body: some View {
+        NavigationView {
+            VStack {
+                // Search Bar
+                TextField("Search for events...", text: $searchText)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding()
+
+                // Example Events below the search bar
+                VStack(spacing: 20) {
+                    ForEach(0..<eventTypes.count, id: \.self) { index in
+                        NavigationLink(destination: EventResultsView(eventType: eventTypes[index])) {
+                            Text(eventTypes[index])
+                                .foregroundColor(.white)
+                                .frame(width: 300, height: 50) // Box size
+                                .background(index % 2 == 0 ? Color.orange : Color.black) // Alternating colors
+                                .cornerRadius(10) // Rounded corners
+                                .font(.headline) // Text style
+                        }
+                    }
+                }
+                .padding()
+            }
+            .navigationTitle("Search Events")
+            .background(Color.gray.edgesIgnoringSafeArea(.all)) // Gray background
+        }
+    }
+    
+    // List of event types (same as used in Home tab)
+    let eventTypes = ["Concerts", "Food Festivals", "Outdoor Activities", "Sporting Events", "Theme Parks", "Night Life", "Hobbies"]
+}
+
+// Account View with Buttons and Dark Gray Background
+struct AccountView: View {
+    var body: some View {
+        VStack(spacing: 20) {
+            // Account Page Buttons
+            Button("User Information") {
+                // Action for User Information
+            }
+            .frame(width: 300, height: 50)
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+            .font(.headline)
+            
+            Button("Security") {
+                // Action for Security
+            }
+            .frame(width: 300, height: 50)
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+            .font(.headline)
+            
+            Button("Privacy") {
+                // Action for Privacy
+            }
+            .frame(width: 300, height: 50)
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+            .font(.headline)
+            
+            Button("Locations") {
+                // Action for Locations
+            }
+            .frame(width: 300, height: 50)
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+            .font(.headline)
+            
+            Button("Notifications") {
+                // Action for Notifications
+            }
+            .frame(width: 300, height: 50)
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+            .font(.headline)
+        }
+        .padding()
+        .background(Color.gray.edgesIgnoringSafeArea(.all)) // Dark gray background for the entire page
+        .navigationTitle("Account Settings")
+    }
+}
+
+// Previews
+struct MainView_Previews: PreviewProvider {
+    static var previews: some View {
+        MainView()
+    }
+}
